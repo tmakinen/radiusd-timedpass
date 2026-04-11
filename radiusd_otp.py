@@ -48,7 +48,7 @@ class UnixAuth:
                 ]
                 environ["REMOTE_USER"] = user.pw_name
                 environ["REMOTE_GROUPS"] = groups
-            except:
+            except Exception:
                 pass
         return self.app(environ, start_response)
 
@@ -97,7 +97,7 @@ def get_or_create_secret(username):
     try:
         secret = db_conn.get(f"secret:{username}")
     except valkey.exceptions.ConnectionError:
-        api.logger.error(f"Connection failed to valkey server")
+        api.logger.error("Connection failed to valkey server")
         abort(503)
     if not secret:
         api.logger.info(f"Creating new secret for user '{username}'")
