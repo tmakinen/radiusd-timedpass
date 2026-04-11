@@ -25,3 +25,41 @@ jobs:
         run: ruff check
       - name: Run ruff format
         run: ruff format --check
+
+  rpm:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        dist: [el9, el10]
+        include:
+          - dist: el9
+            mock_config: rhel-9-x86_64
+          - dist: el10
+            mock_config: rhel-10-x86_64
+    timeout-minutes: 5
+    container:
+      image: fedora:latest
+      options: --privileged
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+      - name: Install build tools
+        run: dnf -y install mock pyproject-rpm-macros python3-devel rpm-build
+      - name: Create SRPM
+        run: |
+          tar -czf ../radiusd-otp-0.1.0.tar.gz .
+          pmbuild -bs \
+              --define "_sourcedir $(pwd)/.." \
+              --define "_srcrpmdir $(pwd)/dist" \
+              rpm/radiusd-otp.spec
+      - name: Build RPM
+        run: |
+          mock -r ${{ matrix.mock_config }} \
+              --rebuild dist/*.src.rpm \
+              --resultdir=artifacts
+      - name: Upload RPM to artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: rpm-${{ matrix.dist }}
+          path: artifacts/*.rpm
+          retention-days: 7
