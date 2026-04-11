@@ -41,7 +41,7 @@ jobs:
               --define "_sourcedir $(pwd)/.." \
               --define "_srcrpmdir $(pwd)/dist" \
               --define "git_hash $(git rev-parse --short HEAD)" \
-              rpm/radiusd-otp.spec
+              packaging/radiusd-otp.spec
       - name: Store SRPM to artifacts
         uses: actions/upload-artifact@v7
         with:
