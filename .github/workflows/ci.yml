@@ -1,3 +1,9 @@
+---
+name: CI
+# yamllint disable-line rule:truthy
+on:
+  push:
+
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
