@@ -8,7 +8,6 @@ version = "0.1.0"
 authors = [{name = "Timo Mäkinen", email = "tmakinen@foo.sh"}, ]
 description = "Simple WSGI app to provide OTP passwords to RADIUS"
 license = {text = "MIT"}
-license-files = ["LICENSE"]
 readme = "README.md"
 dependencies = [
     "flask",
@@ -18,3 +17,4 @@ dependencies = [
 
 [tool.setuptools]
 py-modules = ["radiusd_otp"]
+license-files = ["LICENSE"]
