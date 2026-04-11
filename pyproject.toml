@@ -7,7 +7,7 @@ name = "radiusd_otp"
 version = "0.1.0"
 authors = [{name = "Timo Mäkinen", email = "tmakinen@foo.sh"}, ]
 description = "Simple WSGI app to provide OTP passwords to RADIUS"
-license = "MIT"
+license = {text = "MIT"}
 license-files = ["LICENSE"]
 readme = "README.md"
 dependencies = [
