@@ -26,10 +26,32 @@ jobs:
       - name: Run ruff format
         run: ruff format --check
 
-  rpm:
+  srpm:
     runs-on: ubuntu-latest
     needs:
       - ruff
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+      - name: Create SRPM
+        run: |
+          git archive --format=tar.gz --prefix=radiusd-otp-0.1.0/ \
+              -o ../radiusd-otp-0.1.0.tar.gz HEAD
+          rpmbuild -bs \
+              --define "_sourcedir $(pwd)/.." \
+              --define "_srcrpmdir $(pwd)/dist" \
+              rpm/radiusd-otp.spec
+      - name: Store SRPM to artifacts
+        uses: actions/upload-artifact@v6
+        with:
+          name: source-rpm
+          path: artifacts/*.src.rpm
+          retention-days: 7
+
+  rpm:
+    runs-on: ubuntu-latest
+    needs:
+      - srpm
     strategy:
       matrix:
         dist: [el9, el10]
