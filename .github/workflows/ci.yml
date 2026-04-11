@@ -49,7 +49,8 @@ jobs:
         run: dnf -y install mock pyproject-rpm-macros python3-devel rpm-build
       - name: Create SRPM
         run: |
-          tar -czf ../radiusd-otp-0.1.0.tar.gz .
+          git archive --format=tar.gz --prefix=radiusd-otp-0.1.0/ \
+              -o ../radiusd-otp-0.1.0.tar.gz HEAD
           rpmbuild -bs \
               --define "_sourcedir $(pwd)/.." \
               --define "_srcrpmdir $(pwd)/dist" \
