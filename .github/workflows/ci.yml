@@ -46,7 +46,13 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v6
       - name: Install build tools
-        run: dnf -y install mock pyproject-rpm-macros python3-devel rpm-build
+        run: |
+          dnf -y install \
+              git \
+              mock \
+              pyproject-rpm-macros \
+              python3-devel \
+              rpm-build
       - name: Create SRPM
         run: |
           git archive --format=tar.gz --prefix=radiusd-otp-0.1.0/ \
