@@ -55,6 +55,8 @@ jobs:
               rpm-build
       - name: Create SRPM
         run: |
+          pwd
+          ls -al
           git archive --format=tar.gz --prefix=radiusd-otp-0.1.0/ \
               -o ../radiusd-otp-0.1.0.tar.gz HEAD
           rpmbuild -bs \
