@@ -6,11 +6,11 @@ This project implements a secure, automated authentication workflow for network 
 
 1. **Network Device:** Request authentication via RADIUS (PAP).
 1. **RADIUS Server:** Executes a local script to validate credentials.
-1. ** REST API (Gunicorn):**
-  1. Listens on a Unix Socket for security.
-  1. Manages user secrets in Valkey.
-  1. Generates/validates OTP-style passwords.
-  1. Client SSH: Uses `SSH_ASKPASS` to fetch the OTP from the API automatically for a passwordless experience.
+1. **REST API (Gunicorn):**
+   * Listens on a Unix Socket for security.
+   * Manages user secrets in Valkey.
+   * Generates/validates OTP-style passwords.
+   * Client SSH: Uses `SSH_ASKPASS` to fetch the OTP from the API automatically for a passwordless experience.
 
 ## Components
 
