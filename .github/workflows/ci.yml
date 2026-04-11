@@ -35,9 +35,9 @@ jobs:
         dist: [el9, el10]
         include:
           - dist: el9
-            mock_config: rhel-9-x86_64
+            mock_config: rocky+epel-9-x86_64
           - dist: el10
-            mock_config: rhel-10-x86_64
+            mock_config: rocky+epel-10-x86_64
     timeout-minutes: 5
     container:
       image: fedora:latest
