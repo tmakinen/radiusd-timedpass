@@ -58,8 +58,8 @@ jobs:
         dist: [el10]
         include:
           - dist: el10
-            mock_config: rocky+epel-10-x86_64
-    timeout-minutes: 5
+            mock_config: epel-10-x86_64
+    timeout-minutes: 15
     container:
       image: fedora:latest
       options: --privileged
