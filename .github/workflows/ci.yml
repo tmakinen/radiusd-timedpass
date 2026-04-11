@@ -36,9 +36,9 @@ jobs:
       - name: Create SRPM
         run: |
           git archive --format=tar.gz --prefix=radiusd-otp-0.1.0/ \
-              -o ../radiusd-otp-0.1.0.tar.gz HEAD
+              -o packaging/radiusd-otp-0.1.0.tar.gz HEAD
           rpmbuild -bs \
-              --define "_sourcedir $(pwd)/.." \
+              --define "_sourcedir $(pwd)/packaging" \
               --define "_srcrpmdir $(pwd)/dist" \
               --define "git_hash $(git rev-parse --short HEAD)" \
               packaging/radiusd-otp.spec
