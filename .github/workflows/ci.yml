@@ -50,7 +50,7 @@ jobs:
       - name: Create SRPM
         run: |
           tar -czf ../radiusd-otp-0.1.0.tar.gz .
-          pmbuild -bs \
+          rpmbuild -bs \
               --define "_sourcedir $(pwd)/.." \
               --define "_srcrpmdir $(pwd)/dist" \
               rpm/radiusd-otp.spec
