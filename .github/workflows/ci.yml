@@ -65,28 +65,17 @@ jobs:
       image: fedora:latest
       options: --privileged
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v6
+      - name: Download SRPM
+        uses: actions/download-artifact@v6
+        with:
+          name: source-rpm
+          path: dist
       - name: Install build tools
-        run: |
-          dnf -y install \
-              git \
-              mock \
-              pyproject-rpm-macros \
-              python3-devel \
-              rpm-build
-      - name: Create SRPM
+        run: dnf -y install mock
+      - name: Build RPM
         run: |
           pwd
           ls -al
-          git archive --format=tar.gz --prefix=radiusd-otp-0.1.0/ \
-              -o ../radiusd-otp-0.1.0.tar.gz HEAD
-          rpmbuild -bs \
-              --define "_sourcedir $(pwd)/.." \
-              --define "_srcrpmdir $(pwd)/dist" \
-              rpm/radiusd-otp.spec
-      - name: Build RPM
-        run: |
           mock -r ${{ matrix.mock_config }} \
               --rebuild dist/*.src.rpm \
               --resultdir=artifacts
