@@ -45,7 +45,7 @@ jobs:
         uses: actions/upload-artifact@v6
         with:
           name: source-rpm
-          path: artifacts/*.src.rpm
+          path: dist/*.src.rpm
           retention-days: 7
 
   rpm:
