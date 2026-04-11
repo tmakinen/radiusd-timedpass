@@ -7,8 +7,6 @@ URL:            https://github.com/tmakinen/radiusd-otp
 Source:         %{url}/archive/v%{version}/radiusd-otp-%{version}.tar.gz
 BuildArch:      noarch
 BuildRequires:  python3-devel
-
-# The following provides the modern pyproject macros
 BuildRequires:  pyproject-rpm-macros
 
 %description
