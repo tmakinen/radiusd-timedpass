@@ -60,8 +60,15 @@ jobs:
               --rebuild dist/*.src.rpm \
               --resultdir=artifacts
       - name: Upload RPM to artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: rpm-${{ matrix.dist }}
           path: artifacts/*.rpm
           retention-days: 7
+
+      - name: Upload logs on failure
+        if: failure()
+        uses: actions/upload-artifact@v6
+        with:
+          name: mock-logs-${{ matrix.dist }}
+          path: artifacts/*.log
