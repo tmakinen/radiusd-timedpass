@@ -35,12 +35,13 @@ jobs:
         uses: actions/checkout@v6
       - name: Create SRPM
         run: |
+          GIT_HASH="$(git rev-parse --short HEAD)"
           git archive --format=tar.gz --prefix=radiusd-otp-0.1.0/ \
               -o packaging/radiusd-otp-0.1.0.tar.gz HEAD
           rpmbuild -bs \
               --define "_sourcedir $(pwd)/packaging" \
               --define "_srcrpmdir $(pwd)/dist" \
-              --define "git_hash $(git rev-parse --short HEAD)" \
+              --define "git_hash ${GIT_HASH}" \
               packaging/radiusd-otp.spec
       - name: Store SRPM to artifacts
         uses: actions/upload-artifact@v7
