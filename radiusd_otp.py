@@ -5,7 +5,6 @@ import hmac
 import logging
 import os
 import pwd
-import valkey
 import secrets
 import socket
 import struct
@@ -13,6 +12,11 @@ from flask import Flask, abort, jsonify, request
 from functools import wraps
 from time import time
 from werkzeug.exceptions import HTTPException, Unauthorized
+
+try:
+    import valkey
+except ImportError:
+    import redis as valkey
 
 
 class API(Flask):
