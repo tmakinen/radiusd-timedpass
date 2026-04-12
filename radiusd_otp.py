@@ -15,8 +15,10 @@ from werkzeug.exceptions import HTTPException, Unauthorized
 
 try:
     import valkey
+    DEFAULT_SHCEME="valkey"
 except ImportError:
     import redis as valkey
+    DEFAULT_SCHEME="redis"
 
 
 class API(Flask):
@@ -29,7 +31,7 @@ class API(Flask):
 
 
 VALKEY_PREFIX = os.environ.get("VALKEY_PREFIX", "secret")
-VALKEY_URL = os.environ.get("VALKEY_URL", "valkey://localhost:6379")
+VALKEY_URL = os.environ.get("VALKEY_URL", f"{DEFAULT_SCHEME}://localhost:6379")
 VALKEY_TTL = int(os.environ.get("VALKEY_TTL", 30 * 24 * 60 * 60))
 
 
