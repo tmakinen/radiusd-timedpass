@@ -6,3 +6,6 @@
 
 # Valkey TTL in seconds (default: 30 days)
 # VALKEY_TTL=2592000
+
+# Gunicorn worker count
+GUNICORN_WORKERS=4
