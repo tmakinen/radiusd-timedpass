@@ -75,13 +75,12 @@ jobs:
         run: dnf -y install mock
       - name: Build RPM
         run: |
-          find dist/ -type f -name \*.src.rpm | while read -r srpm; do
-              git_hash="$(echo "$name" | cut -d. -f4)"
-              mock -r ${{ matrix.mock_config }} \
-                  --define "git_hash ${git_hash}" \
-                  --rebuild dist/*.src.rpm \
-                  --resultdir=artifacts
-          done
+          GIT_HASH="$(rpm -qp --queryformat='%{RELEASE}' dist/*.src.rpm | \
+              sed 's/^[0-9]*\.\([a-f0-9]*\).*/\1/')"
+          mock -r ${{ matrix.mock_config }} --rebuild \
+              --define="git_hash ${GIT_HASH}" \
+              --resultdir=artifacts \
+              dist/*.src.rpm
       - name: Upload RPM to artifacts
         uses: actions/upload-artifact@v7
         with:
