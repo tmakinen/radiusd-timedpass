@@ -74,6 +74,20 @@ def authorize(user=[], group=[]):
     return decorator
 
 
+def get_uid_range():
+    with open("/etc/login.defs", "r") as fp:
+        for line in fp.readlines():
+            line = line.split()
+            try:
+                if line[0] == "UID_MIN":
+                    uid_min = int(line[1])
+                elif line[0] == "UID_MAX":
+                    uid_max = int(line[1])
+            except IndexError:
+                pass
+    return (uid_min, uid_max)
+
+
 api = API(__name__)
 api.wsgi_app = UnixAuth(api.wsgi_app)
 
@@ -112,9 +126,13 @@ def get_or_create_secret(username):
 
 def get_otp_for_user(username):
     try:
-        pwd.getpwnam(username)
+        user = pwd.getpwnam(username)
     except KeyError:
         api.logger.warning(f"Invalid username '{username}'")
+        abort(400)
+    (uid_min, uid_max) = get_uid_range()
+    if uid_min > user.pw_uid < uid_max:
+        api.logger.warning(f"User '{username}' not allowed, UID not in range")
         abort(400)
     secret = get_or_create_secret(username)
     otp = generate_otp(secret)
