@@ -1,0 +1,8 @@
+# Valkey/Redis connection URL
+# VALKEY_URL=valkey://localhost:6379
+
+# Valkey key prefix
+# VALKEY_PREFIX=secret
+
+# Valkey TTL in seconds (default: 30 days)
+# VALKEY_TTL=2592000

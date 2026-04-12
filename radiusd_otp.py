@@ -5,7 +5,6 @@ import hmac
 import logging
 import os
 import pwd
-import valkey
 import secrets
 import socket
 import struct
@@ -13,6 +12,11 @@ from flask import Flask, abort, jsonify, request
 from functools import wraps
 from time import time
 from werkzeug.exceptions import HTTPException, Unauthorized
+
+try:
+    import valkey
+except ImportError:
+    import redis as valkey
 
 
 class API(Flask):
@@ -25,7 +29,7 @@ class API(Flask):
 
 
 VALKEY_PREFIX = os.environ.get("VALKEY_PREFIX", "secret")
-VALKEY_URL = os.environ.get("VALKEY_URL", "valkey://localhost:6379")
+VALKEY_URL = os.environ.get("VALKEY_URL", f"{valkey.__name__}://localhost:6379")
 VALKEY_TTL = int(os.environ.get("VALKEY_TTL", 30 * 24 * 60 * 60))
 
 
