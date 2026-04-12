@@ -55,8 +55,10 @@ jobs:
       - srpm
     strategy:
       matrix:
-        dist: [el10]
+        dist: [el9, el10]
         include:
+          - dist: el9
+            mock_config: epel-9-x86_64
           - dist: el10
             mock_config: epel-10-x86_64
     timeout-minutes: 15
