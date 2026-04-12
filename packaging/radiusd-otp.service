@@ -8,6 +8,7 @@ Before=radiusd
 Type=simple
 User=radiusd
 Group=radiusd
+EnvironmentFile=/etc/sysconfig/radiusd-otp
 ExecStart=/usr/bin/gunicorn -w 1 --bind unix:/run/radiusd-otp/sock radiusd_otp:api
 Restart=always
 

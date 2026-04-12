@@ -15,6 +15,7 @@ Requires:       freeradius
 
 Source1:        radiusd-otp.service
 Source2:        radiusd-otp.tmpfiles.conf
+Source3:        radiusd-otp.sysconfig
 
 %description
 Simple WSGI app to provide OTP passwords to RADIUS
@@ -36,6 +37,7 @@ install -m 0644 %{SOURCE1} %{buildroot}%{_unitdir}/%{name}.service
 install -d -m 0755 %{buildroot}/run/%{name}/
 mkdir -p %{buildroot}%{_tmpfilesdir}
 install -m 0644 %{SOURCE2} %{buildroot}%{_tmpfilesdir}/%{name}.conf
+install -m 0544 %{SOURCE3} %{buildroot}%{_sysconfdir}/sysconfig/radiusd-otp
 
 %post
 /bin/systemctl daemon-reload >/dev/null 2>&1 || :
@@ -58,6 +60,7 @@ fi
 %dir /run/%{name}/
 %{_unitdir}/%{name}.service
 %{_tmpfilesdir}/%{name}.conf
+%config(noreplace) %{_sysconfdir}/sysconfig/radiusd-otp
 
 %changelog
 * Sat Apr 11 2026 Timo Mäkinen <tmakinen@foo.sh> - 0.1.0-1
