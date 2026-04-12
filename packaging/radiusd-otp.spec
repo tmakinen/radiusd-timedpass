@@ -30,7 +30,7 @@ Simple WSGI app to provide OTP passwords to RADIUS
 
 %install
 %pyproject_install
-%pyproject_save_files radiusd_otp
+%pyproject_save_files '*'
 mkdir -p %{buildroot}%{_unitdir}
 install -m 0644 %{SOURCE1} %{buildroot}%{_unitdir}/%{name}.service
 install -d -m 0755 %{buildroot}/run/%{name}/
