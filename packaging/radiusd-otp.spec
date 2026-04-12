@@ -1,6 +1,6 @@
 Name:           radiusd-otp
 Version:        0.1.0
-Release:        1%{?dist}%{?git_hash:.%git_hash}
+Release:        1%{?git_hash:.%{git_hash}}%{?dist}
 Summary:        Simple WSGI app to provide OTP passwords to RADIUS
 License:        MIT
 URL:            https://github.com/tmakinen/radiusd-otp
