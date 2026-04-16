@@ -115,7 +115,7 @@ def get_or_create_secret(username):
     try:
         secret = db_conn.get(f"secret:{username}")
     except valkey.exceptions.ConnectionError as e:
-        api.logger.error("Connection failed to valkey server: {e}")
+        api.logger.error(f"Connection failed to valkey server: {e}")
         abort(503)
     if not secret:
         api.logger.info(f"Creating new secret for user '{username}'")
