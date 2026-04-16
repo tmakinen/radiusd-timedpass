@@ -142,6 +142,28 @@ def get_otp_for_user(username):
     }
 
 
+@api.route("/auth", methods=["POST"])
+def authenticate():
+    data = request.get_json()
+    if not data:
+        api.logger.warning("No data provided in request")
+        abort(400)
+    try:
+        username = data["User-Name"]
+        password = data["User-Password"]
+    except KeyError:
+        api.logger.warning("Missing username or password")
+        abort(400)
+
+    secret = get_or_create_secret(username)
+    otp = generate_otp(secret)
+    if otp == password:
+        return "", 204
+    else:
+        api.logger.warning(f"Authentication failed for user {username}")
+        abort(401)
+
+
 @api.route("/otp")
 def get_otp():
     username = request.environ.get("REMOTE_USER")
