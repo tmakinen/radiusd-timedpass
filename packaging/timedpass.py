@@ -28,7 +28,7 @@ def authenticate(p):
 
     conn = None
     try:
-        conn = UnixSocketConnection("/run/radiusd-otp/sock")
+        conn = UnixSocketConnection("/run/radiusd-timedpass/sock")
         headers = {"Content-Type": "application/json"}
         conn.request("POST", "/auth", body=payload, headers=headers)
 
