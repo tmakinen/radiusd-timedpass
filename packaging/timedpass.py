@@ -16,32 +16,31 @@ class UnixSocketConnection(http.client.HTTPConnection):
 
 def authenticate(p):
     request_data = dict(p)
-    username = request_data.get('User-Name')
-    password = request_data.get('User-Password')
+    username = request_data.get("User-Name")
+    password = request_data.get("User-Password")
 
     if not username or not password:
         return radiusd.RLM_MODULE_REJECT
 
-    payload = json.dumps({
-        "User-Name": username,
-        "User-Password": password
-    }).encode('utf-8')
+    payload = json.dumps({"User-Name": username, "User-Password": password}).encode(
+        "utf-8"
+    )
 
     conn = None
     try:
         conn = UnixSocketConnection("/run/radiusd-otp/sock")
         headers = {"Content-Type": "application/json"}
         conn.request("POST", "/auth", body=payload, headers=headers)
-        
+
         response = conn.getresponse()
         status = response.status
 
         if status == 204 or status == 200:
             return radiusd.RLM_MODULE_OK
-            
+
         if status == 401 or status == 403:
             return radiusd.RLM_MODULE_REJECT
-            
+
         if 500 <= status <= 599:
             radiusd.radlog(radiusd.L_ERR, f"OTP API Server Error: {status}")
             return radiusd.RLM_MODULE_FAIL
@@ -58,8 +57,4 @@ def authenticate(p):
 
 
 def authorize(p):
-    return (
-        radiusd.RLM_MODULE_UPDATED, 
-        (),
-        ( ('Auth-Type', 'timedpass'), )
-    )
+    return (radiusd.RLM_MODULE_UPDATED, (), (("Auth-Type", "timedpass"),))
