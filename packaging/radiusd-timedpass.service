@@ -8,8 +8,8 @@ Before=radiusd
 Type=simple
 User=radiusd
 Group=radiusd
-EnvironmentFile=/etc/sysconfig/radiusd-otp
-ExecStart=/usr/bin/gunicorn --access-logfile - --bind unix:/run/radiusd-otp/sock -w "$GUNICORN_WORKERS" radiusd_otp:api
+EnvironmentFile=/etc/sysconfig/radiusd-timedpass
+ExecStart=/usr/bin/gunicorn --access-logfile - --bind unix:/run/radiusd-timedpass/sock -w "$GUNICORN_WORKERS" radiusd_timedpass:api
 Restart=always
 
 [Install]

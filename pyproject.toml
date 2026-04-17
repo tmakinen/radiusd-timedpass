@@ -3,7 +3,7 @@ requires = ["setuptools>=40.6.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "radiusd_otp"
+name = "radiusd_timedpass"
 version = "0.1.0"
 authors = [{name = "Timo Mäkinen", email = "tmakinen@foo.sh"}, ]
 description = "Simple WSGI app to provide OTP passwords to RADIUS"
@@ -16,5 +16,5 @@ dependencies = [
 ]
 
 [tool.setuptools]
-py-modules = ["radiusd_otp"]
+py-modules = ["radiusd_timedpass"]
 license-files = ["LICENSE"]
