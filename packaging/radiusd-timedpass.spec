@@ -12,6 +12,7 @@ BuildRequires:  pyproject-rpm-macros
 BuildRequires:  systemd-rpm-macros
 Requires(post): systemd-units
 Requires:       freeradius
+Requires:       python3-freeradius
 
 Source1:        radiusd-timedpass.service
 Source2:        radiusd-timedpass.tmpfiles.conf
