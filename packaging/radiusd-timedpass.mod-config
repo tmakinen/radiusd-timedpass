@@ -1,8 +1,6 @@
 python3 timedpass {
     module = timedpass
     python_path = ${modconfdir}/python3
-    mod_authenticate = ${.module}
-    func_authenticate = authenticate
     mod_authorize = ${.module}
     func_authorize = authorize
 }

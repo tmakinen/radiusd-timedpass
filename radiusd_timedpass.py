@@ -177,7 +177,7 @@ def get_otp():
 
 
 @api.route("/otp/<username>")
-@authorize(user="root")
+@authorize(user="radiusd")
 def get_otp_user(username):
     return jsonify(get_otp_for_user(username))
 
