@@ -10,6 +10,7 @@ User=radiusd
 Group=radiusd
 EnvironmentFile=/etc/sysconfig/radiusd-timedpass
 ExecStart=/usr/bin/gunicorn --access-logfile - --bind unix:/run/radiusd-timedpass/sock -w "$GUNICORN_WORKERS" radiusd_timedpass:api
+SELinuxContext=system_u:system_r:radiusd_timedpass_t:s0
 Restart=always
 
 [Install]

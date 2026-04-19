@@ -9,8 +9,10 @@ BuildArch:      noarch
 
 BuildRequires:  python3-devel
 BuildRequires:  pyproject-rpm-macros
+BuildRequires:  selinux-policy-devel
 BuildRequires:  systemd-rpm-macros
-Requires(post): systemd-units
+Requires(post): policycoreutils, systemd-units, systemd
+Requires(postun): policycoreutils
 Requires:       freeradius
 Requires:       python3-freeradius
 
@@ -19,6 +21,8 @@ Source2:        radiusd-timedpass.tmpfiles.conf
 Source3:        radiusd-timedpass.sysconfig
 Source4:        radiusd-timedpass.mod-config
 Source5:        timedpass.py
+Source6:        radiusd-timedpass.te
+Source7:        radiusd-timedpass.fc
 
 %description
 Simple WSGI app to provide OTP passwords to RADIUS
@@ -28,9 +32,11 @@ Simple WSGI app to provide OTP passwords to RADIUS
 
 %generate_buildrequires
 %pyproject_buildrequires -R
+cp %{SOURCE6} %{SOURCE7} .
 
 %build
 %pyproject_wheel
+make -f %{_datadir}/selinux/devel/Makefile radiusd-timedpass.pp
 
 %install
 %pyproject_install
@@ -43,8 +49,12 @@ install -D -m 0640 %{SOURCE4} %{buildroot}%{_sysconfdir}/raddb/mods-available/ti
 mkdir -p %{buildroot}%{_sysconfdir}/raddb/mods-enabled
 ln -sf ../mods-available/timedpass %{buildroot}%{_sysconfdir}/raddb/mods-enabled/timedpass
 install -D -m 0755 %{SOURCE5} %{buildroot}%{_sysconfdir}/raddb/mods-config/python3/timedpass.py
+install -D -m 0644 radiusd-timedpass.pp %{buildroot}%{_datadir}/selinux/packages/radiusd-timedpass.pp
 
 %post
+/usr/sbin/semodule -i %{_datadir}/selinux/packages/radiusd-timedpass.pp || :
+/usr/bin/systemd-tmpfiles --create %{_tmpfilesdir}/radiusd-timedpass.conf || :
+/sbin/restorecon -R /run/radiusd-timedpass || :
 /bin/systemctl daemon-reload >/dev/null 2>&1 || :
 
 %preun
@@ -58,6 +68,10 @@ fi
 if [ "$1" -ge "1" ] ; then
     /bin/systemctl try-restart radiusd-timedpass.service >/dev/null 2>&1 || :
 fi
+if [ $1 -eq 0 ]; then
+    # Remove the policy module when the package is uninstalled
+    /usr/sbin/semodule -r radiusd-timedpass || :
+fi
 
 %files -n radiusd-timedpass -f %{pyproject_files}
 %doc README.md
@@ -68,6 +82,7 @@ fi
 %attr(0640,root,radiusd) %{_sysconfdir}/raddb/mods-available/timedpass
 %attr(0777,root,radiusd) %{_sysconfdir}/raddb/mods-enabled/timedpass
 %attr(0755,root,root) %{_sysconfdir}/raddb/mods-config/python3/timedpass.py
+%{_datadir}/selinux/packages/radiusd-timedpass.pp
 %config(noreplace) %{_sysconfdir}/sysconfig/radiusd-timedpass
 
 %changelog
