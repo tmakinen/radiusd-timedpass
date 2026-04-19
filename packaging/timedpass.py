@@ -1,7 +1,9 @@
-import radiusd
-import json
-import socket
+import binascii
+import hashlib
 import http.client
+import json
+import radiusd
+import socket
 
 
 class UnixSocketConnection(http.client.HTTPConnection):
