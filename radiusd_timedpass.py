@@ -1,5 +1,6 @@
 import base64
 import grp
+import gunicorn.app.base
 import hashlib
 import hmac
 import logging
@@ -26,6 +27,22 @@ class API(Flask):
 
     def error_handler(self, e):
         return {"title": f"{e.code}: {e.name}"}, e.code
+
+
+class StandaloneApplication(gunicorn.app.base.BaseApplication):
+    def __init__(self, app, options=None):
+        self.options = options or {}
+        self.application = app
+        super().__init__()
+
+    def load_config(self):
+        config = {key: value for key, value in self.options.items()
+                  if key in self.cfg.settings and value is not None}
+        for key, value in config.items():
+            self.cfg.set(key.lower(), value)
+
+    def load(self):
+        return self.application
 
 
 VALKEY_PREFIX = os.environ.get("VALKEY_PREFIX", "secret")
@@ -186,3 +203,13 @@ def get_otp_user(username):
 def whoami():
     username = request.environ.get("REMOTE_USER")
     return jsonify({"username": username})
+
+
+if __name__ == "__main__":
+    socket_path = os.environ.get("SOCKET_PATH", "/run/radiusd-timedpass/sock")
+    options = {
+        "accesslog": "-",
+        "bind": f"unix:{socket_path}",
+        "workers": int(os.environ.get("GUNICORN_WORKERS", 4)),
+    }
+    StandaloneApplication(api, options).run()
