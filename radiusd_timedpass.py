@@ -151,7 +151,7 @@ def get_otp_for_user(username):
         api.logger.warning(f"Invalid username '{username}'")
         abort(400)
     (uid_min, uid_max) = get_uid_range()
-    if uid_min > user.pw_uid < uid_max:
+    if uid_min > user.pw_uid < uid_max or user.pw_uid == 0:
         api.logger.warning(f"User '{username}' not allowed, UID not in range")
         abort(400)
     secret = get_or_create_secret(username)
