@@ -10,6 +10,8 @@ User=radiusd
 Group=radiusd
 EnvironmentFile=/etc/sysconfig/radiusd-timedpass
 ExecStart=/usr/bin/python3 -I -m radiusd_timedpass
+RuntimeDirectory=radiusd-timedpass
+RuntimeDirectoryMode=0755
 SELinuxContext=system_u:system_r:radiusd_timedpass_t:s0
 Restart=always
 

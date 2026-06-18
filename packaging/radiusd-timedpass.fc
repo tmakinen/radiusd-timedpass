@@ -1,1 +1,0 @@
-/run/radiusd-timedpass(/.*)? gen_context(system_u:object_r:radiusd_timedpass_sock_t,s0)
