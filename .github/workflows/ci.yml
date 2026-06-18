@@ -18,7 +18,7 @@ jobs:
       - name: Setup Python
         uses: actions/setup-python@v6
         with:
-          python-version: "3.14"
+          python-version: "3.12"
       - name: Install python dependencies
         run: pip3 install ruff
       - name: Run ruff check
@@ -53,14 +53,6 @@ jobs:
     runs-on: ubuntu-latest
     needs:
       - srpm
-    strategy:
-      matrix:
-        dist: [el9, el10]
-        include:
-          - dist: el9
-            mock_config: rocky+epel-9-x86_64
-          - dist: el10
-            mock_config: rocky+epel-10-x86_64
     timeout-minutes: 15
     container:
       image: fedora:latest
@@ -77,14 +69,14 @@ jobs:
         run: |
           GIT_HASH="$(rpm -qp --queryformat='%{RELEASE}' dist/*.src.rpm | \
               sed 's/^[0-9]*\.\([a-f0-9]*\).*/\1/')"
-          mock -r ${{ matrix.mock_config }} --rebuild \
+          mock -r rocky+epel-10-x86_64 --rebuild \
               --define="git_hash ${GIT_HASH}" \
               --resultdir=artifacts \
               dist/*.src.rpm
       - name: Upload RPM to artifacts
         uses: actions/upload-artifact@v7
         with:
-          name: rpm-${{ matrix.dist }}
+          name: rpm-el10
           path: artifacts/*.rpm
           retention-days: 7
 
