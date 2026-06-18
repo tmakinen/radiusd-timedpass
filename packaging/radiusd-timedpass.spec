@@ -43,7 +43,7 @@ install -d -m 0755 %{buildroot}/run/%{name}/
 install -D -m 0644 %{SOURCE1} %{buildroot}%{_unitdir}/%{name}.service
 install -D -m 0644 %{SOURCE2} %{buildroot}%{_sysconfdir}/sysconfig/radiusd-timedpass
 install -D -m 0640 %{SOURCE3} %{buildroot}%{_sysconfdir}/raddb/mods-available/timedpass
-mkdir -p %{buildroot}%{_syssonfdir}/raddb/mods-enabled
+mkdir -p %{buildroot}%{_sysconfdir}/raddb/mods-enabled
 ln -sf ../mods-available/timedpass %{buildroot}%{_sysconfdir}/raddb/mods-enabled/timedpass
 install -D -m 0755 %{SOURCE4} %{buildroot}%{_sysconfdir}/raddb/mods-config/python3/timedpass.py
 install -D -m 0644 radiusd-timedpass.pp %{buildroot}%{_datadir}/selinux/packages/radiusd-timedpass.pp
