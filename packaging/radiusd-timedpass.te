@@ -8,6 +8,7 @@ require {
     type redis_port_t;
     type unconfined_t;
     type user_t;
+    type var_run_t;
     type init_var_run_t;
     class sock_file { write getattr append open };
     class unix_stream_socket connectto;

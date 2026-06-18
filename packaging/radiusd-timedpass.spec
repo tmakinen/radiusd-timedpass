@@ -17,12 +17,11 @@ Requires:       freeradius
 Requires:       python3-freeradius
 
 Source1:        radiusd-timedpass.service
-Source2:        radiusd-timedpass.tmpfiles.conf
-Source3:        radiusd-timedpass.sysconfig
-Source4:        radiusd-timedpass.mod-config
-Source5:        timedpass.py
-Source6:        radiusd-timedpass.te
-Source7:        radiusd-timedpass.fc
+Source2:        radiusd-timedpass.sysconfig
+Source3:        radiusd-timedpass.mod-config
+Source4:        timedpass.py
+Source5:        radiusd-timedpass.te
+Source6:        radiusd-timedpass.fc
 
 %description
 Simple WSGI app to provide OTP passwords to RADIUS
@@ -32,7 +31,7 @@ Simple WSGI app to provide OTP passwords to RADIUS
 
 %generate_buildrequires
 %pyproject_buildrequires -R
-cp %{SOURCE6} %{SOURCE7} .
+cp %{SOURCE5} %{SOURCE6} .
 
 %build
 %pyproject_wheel
@@ -43,17 +42,15 @@ make -f %{_datadir}/selinux/devel/Makefile radiusd-timedpass.pp
 %pyproject_save_files '*'
 install -d -m 0755 %{buildroot}/run/%{name}/
 install -D -m 0644 %{SOURCE1} %{buildroot}%{_unitdir}/%{name}.service
-install -D -m 0644 %{SOURCE2} %{buildroot}%{_tmpfilesdir}/%{name}.conf
-install -D -m 0644 %{SOURCE3} %{buildroot}%{_sysconfdir}/sysconfig/radiusd-timedpass
-install -D -m 0640 %{SOURCE4} %{buildroot}%{_sysconfdir}/raddb/mods-available/timedpass
+install -D -m 0644 %{SOURCE2} %{buildroot}%{_sysconfdir}/sysconfig/radiusd-timedpass
+install -D -m 0640 %{SOURCE3} %{buildroot}%{_sysconfdir}/raddb/mods-available/timedpass
 mkdir -p %{buildroot}%{_sysconfdir}/raddb/mods-enabled
 ln -sf ../mods-available/timedpass %{buildroot}%{_sysconfdir}/raddb/mods-enabled/timedpass
-install -D -m 0755 %{SOURCE5} %{buildroot}%{_sysconfdir}/raddb/mods-config/python3/timedpass.py
+install -D -m 0755 %{SOURCE4} %{buildroot}%{_sysconfdir}/raddb/mods-config/python3/timedpass.py
 install -D -m 0644 radiusd-timedpass.pp %{buildroot}%{_datadir}/selinux/packages/radiusd-timedpass.pp
 
 %post
 /usr/sbin/semodule -i %{_datadir}/selinux/packages/radiusd-timedpass.pp || :
-/usr/bin/systemd-tmpfiles --create %{_tmpfilesdir}/radiusd-timedpass.conf || :
 /sbin/restorecon -R /run/radiusd-timedpass || :
 /bin/systemctl daemon-reload >/dev/null 2>&1 || :
 
@@ -78,7 +75,6 @@ fi
 %license LICENSE
 %dir /run/%{name}/
 %{_unitdir}/%{name}.service
-%{_tmpfilesdir}/%{name}.conf
 %attr(0640,root,radiusd) %{_sysconfdir}/raddb/mods-available/timedpass
 %attr(0777,root,radiusd) %{_sysconfdir}/raddb/mods-enabled/timedpass
 %attr(0755,root,root) %{_sysconfdir}/raddb/mods-config/python3/timedpass.py
@@ -86,5 +82,8 @@ fi
 %config(noreplace) %{_sysconfdir}/sysconfig/radiusd-timedpass
 
 %changelog
+* Thu Jun 18 2026 Timo Mäkinen <tmakinen@foo.sh> - 0.2.0-1
+- Drop el9 support
+- Move to RuntimeDirectory in service file
 * Sat Apr 11 2026 Timo Mäkinen <tmakinen@foo.sh> - 0.1.0-1
 - Initial version of package
