@@ -30,7 +30,7 @@ Simple WSGI app to provide OTP passwords to RADIUS
 
 %generate_buildrequires
 %pyproject_buildrequires -R
-cp %{SOURCE6} .
+cp %{SOURCE5} .
 
 %build
 %pyproject_wheel
