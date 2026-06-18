@@ -21,6 +21,7 @@ Source2:        radiusd-timedpass.sysconfig
 Source3:        radiusd-timedpass.mod-config
 Source4:        timedpass.py
 Source5:        radiusd-timedpass.te
+Source6:        radiusd-timedpass.fc
 
 %description
 Simple WSGI app to provide OTP passwords to RADIUS
@@ -30,7 +31,7 @@ Simple WSGI app to provide OTP passwords to RADIUS
 
 %generate_buildrequires
 %pyproject_buildrequires -R
-cp %{SOURCE5} .
+cp %{SOURCE5} %{SOURCE6} .
 
 %build
 %pyproject_wheel
