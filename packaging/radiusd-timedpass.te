@@ -20,10 +20,6 @@ domain_type(radiusd_timedpass_t)
 type radiusd_timedpass_sock_t;
 files_type(radiusd_timedpass_sock_t)
 
-type_transition init_t var_run_t : dir radiusd_timedpass_sock_t "radiusd-timedpass";
-type_transition init_t init_var_run_t : dir radiusd_timedpass_sock_t "radiusd-timedpass";
-allow init_t radiusd_timedpass_sock_t:dir { create setattr add_name remove_name search write };
-
 # daemon permissions
 role system_r types radiusd_timedpass_t;
 auth_read_passwd(radiusd_timedpass_t)
