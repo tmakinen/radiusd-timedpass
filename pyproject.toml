@@ -12,7 +12,7 @@ readme = "README.md"
 dependencies = [
     "flask",
     "gunicorn",
-    "valkey",
+    "redis",
 ]
 
 [tool.setuptools]
