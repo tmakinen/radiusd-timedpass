@@ -8,6 +8,7 @@ require {
     type redis_port_t;
     type unconfined_t;
     type user_t;
+    type var_run_t;
     type init_var_run_t;
     class sock_file { write getattr append open };
     class unix_stream_socket connectto;
@@ -18,6 +19,10 @@ domain_type(radiusd_timedpass_t)
 
 type radiusd_timedpass_sock_t;
 files_type(radiusd_timedpass_sock_t)
+
+type_transition init_t var_run_t : dir radiusd_timedpass_sock_t "radiusd-timedpass";
+type_transition init_t init_var_run_t : dir radiusd_timedpass_sock_t "radiusd-timedpass";
+allow init_t radiusd_timedpass_sock_t:dir { create setattr add_name remove_name search write };
 
 # daemon permissions
 role system_r types radiusd_timedpass_t;
